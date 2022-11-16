@@ -1,5 +1,5 @@
-import { Controller, HttpStatus } from '@nestjs/common';
-import { Body, Post, Res, UseGuards } from '@nestjs/common/decorators';
+import { Controller, HttpStatus, ValidationPipe } from '@nestjs/common';
+import { Body, Post, Put, Res, UseGuards } from '@nestjs/common/decorators';
 import { Response } from 'express';
 import { Scope } from '@nestjs/common/interfaces';
 import { AuthGuard } from '@nestjs/passport';
@@ -14,13 +14,23 @@ import { EmployeeDto } from './dto/employee.dto';
 export class FacialRecognitionController {
     constructor(private facialRecognitionService: FacialRecognitionService) {}
 
-    @Post('saveEmployeeAttendance')
-    async saveEmployeeAttendance(@Body() employeeDto: EmployeeDto, @GetAuthData() authData: AuthInterface, @Res() res: Response){
+    @Post('saveEmployeeEntry')
+    async saveEmployeeEntry(@Body(ValidationPipe) employeeDto: EmployeeDto, @GetAuthData() authData: AuthInterface, @Res() res: Response) {
         const connection = getConnection();
 
         return await connection.manager.transaction(async (entityManager) => {
-            const attendance = await this.facialRecognitionService.saveEmployeeAttendance(employeeDto, authData, entityManager);
+            const attendance = await this.facialRecognitionService.saveEmployeeEntry(employeeDto, authData, entityManager);
             return res.status(HttpStatus.OK).send(attendance);
-        })
+        });
+    }
+
+    @Put('saveEmployeeOutput')
+    async saveEmployeeOutput(@Body(ValidationPipe) employeeDto: EmployeeDto, @GetAuthData() authData: AuthInterface, @Res() res: Response) {
+        const connection = getConnection();
+
+        return await connection.manager.transaction(async (entityManager) => {
+            const attendance = await this.facialRecognitionService.saveEmployeeOutput(employeeDto, authData, entityManager);
+            return res.status(HttpStatus.OK).send(attendance);
+        });
     }
 }

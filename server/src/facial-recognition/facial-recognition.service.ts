@@ -5,7 +5,7 @@ import { EmployeeDto } from './dto/employee.dto';
 
 @Injectable()
 export class FacialRecognitionService {
-    async saveEmployeeAttendance(employeeDto: EmployeeDto, authData: AuthInterface, entityManager: EntityManager) {
+    async saveEmployeeEntry(employeeDto: EmployeeDto, authData: AuthInterface, entityManager: EntityManager) {}
 
-    }
+    async saveEmployeeOutput(employeeDto: EmployeeDto, authData: AuthInterface, entityManager: EntityManager) {}
 }

@@ -1,11 +1,7 @@
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsNotEmpty, IsString } from "class-validator";
 
 export class EmployeeDto {
     @IsNotEmpty()
     @IsString()
     employee: string;
-
-    @IsNotEmpty()
-    @IsNumber()
-    recordType: number;
 }

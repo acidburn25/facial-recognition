@@ -1,11 +1,25 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from './config/config.module';
+import { ConfigService } from './config/config.service';
 import { FacialRecognitionModule } from './facial-recognition/facial-recognition.module';
 
 @Module({
-  imports: [FacialRecognitionModule],
-  controllers: [AppController],
-  providers: [AppService],
+    imports: [
+        TypeOrmModule.forRootAsync({
+            useFactory: async (configService: ConfigService) => (await configService.getMySqlConfig()) as any,
+            name: 'default',
+            inject: [ConfigService],
+        }),
+        CacheModule.register(),
+        FacialRecognitionModule,
+        ConfigModule,
+        AuthModule,
+    ],
+    controllers: [AppController],
+    providers: [AppService],
 })
 export class AppModule {}
