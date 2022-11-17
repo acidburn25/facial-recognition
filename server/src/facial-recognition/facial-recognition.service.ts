@@ -6,6 +6,7 @@ import { EmployeeRepository, EmployeeAssistanceRepository } from '../repositorie
 import { DataSource } from 'typeorm';
 import { EmployeeAssistanceDto } from './dto/employeeAssistance.dto';
 import { ConfigService } from '../config/config.service';
+import { EmployeeDto } from './dto/employee.dto';
 
 @Injectable({ scope: Scope.REQUEST })
 export class FacialRecognitionService {
@@ -16,6 +17,13 @@ export class FacialRecognitionService {
         private readonly employeeRepository: EmployeeRepository,
         private readonly employeeAssistanceRepository: EmployeeAssistanceRepository,
     ) {}
+
+    async getEmployeeByDocument(employeeDto: EmployeeDto | any, authData: AuthInterface): Promise<ESResponseDto> {
+        await this.dataSourceManager();
+        const assistance = await this.employeeRepository.getEmployeeByDocument(employeeDto, this.dataSource);
+
+        return { ok: true, data: assistance, message: 'Get employee Ok!' };
+    }
 
     async saveEmployeeEntry(employeeAssistanceDto: EmployeeAssistanceDto, authData: AuthInterface): Promise<ESResponseDto> {
         await this.dataSourceManager();

@@ -1,5 +1,5 @@
 import { IsOptional } from 'class-validator';
-import { EmployeeAssistanceInterface } from '../../models/interfaces/employee-assistance.interface'
+import { EmployeeAssistanceInterface } from '../../models/interfaces/index'
 
 export class EmployeeAssistanceDto implements EmployeeAssistanceInterface {
     @IsOptional()

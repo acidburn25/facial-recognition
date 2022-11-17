@@ -9,6 +9,6 @@ import { Empleado as Employee } from '../entities/Empleado.entity';
 @Module({
     imports: [CacheModule.register(), TypeOrmModule.forFeature([EmployeeAssistanceRepository, EmployeeRepository, EmployeeAssistance, Employee])],
     controllers: [FacialRecognitionController],
-    providers: [FacialRecognitionService, EmployeeAssistanceRepository],
+    providers: [FacialRecognitionService, EmployeeAssistanceRepository, EmployeeRepository],
 })
 export class FacialRecognitionModule {}
