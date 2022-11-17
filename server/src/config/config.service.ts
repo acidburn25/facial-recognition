@@ -1,6 +1,7 @@
 import { Logger } from '@nestjs/common';
 import * as AWS from 'aws-sdk';
 import * as dotenv from 'dotenv';
+import { DataSource, DataSourceOptions } from 'typeorm';
 
 export class ConfigService {
     private logger = new Logger('ConfigService', { timestamp: true });
@@ -86,6 +87,22 @@ export class ConfigService {
             synchronize: false,
         };
     }
+
+    public async getDataSourceOptions() {
+        const dataSourceOptions: any = {
+            type: this.get('TYPEORM_CONNECTION'),
+            host: this.get('TYPEORM_HOST'),
+            port: this.get('TYPEORM_PORT'),
+            username: this.get('TYPEORM_USERNAME'),
+            password: this.get('TYPEORM_PASSWORD'),
+            database: this.get('TYPEORM_DATABASE'),
+            entities: [__dirname + this.get('TYPEORM_ENTITIES')],
+            synchronize: false,
+        };
+
+        return dataSourceOptions;
+    }
+
 
     public async upAWSConfig() {
         let error: any;

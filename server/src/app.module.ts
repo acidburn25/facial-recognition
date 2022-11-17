@@ -1,5 +1,6 @@
 import { CacheModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
@@ -10,10 +11,12 @@ import { FacialRecognitionModule } from './facial-recognition/facial-recognition
 @Module({
     imports: [
         TypeOrmModule.forRootAsync({
-            useFactory: async (configService: ConfigService) => (await configService.getMySqlConfig()) as any,
+            useFactory: async (configService: ConfigService) => (await configService.getDataSourceOptions()) as any,
             name: 'default',
+            imports: [ConfigModule],
             inject: [ConfigService],
-        }),
+        }
+        ),
         CacheModule.register(),
         FacialRecognitionModule,
         ConfigModule,

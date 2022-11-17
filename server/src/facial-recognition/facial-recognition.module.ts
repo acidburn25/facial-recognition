@@ -1,13 +1,14 @@
 import { CacheModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { EmployeeRepository } from '../repositories/employee.repository';
-import { EmployeeAssistanceRepository } from '../repositories/employeeAssistance.repository';
+import { EmployeeRepository, EmployeeAssistanceRepository } from '../repositories/index';
 import { FacialRecognitionController } from './facial-recognition.controller';
 import { FacialRecognitionService } from './facial-recognition.service';
+import { AsistenciaEmpleado as EmployeeAssistance } from '../entities/AsistenciaEmpleado.entity';
+import { Empleado as Employee } from '../entities/Empleado.entity';
 
 @Module({
-    imports: [CacheModule.register(), TypeOrmModule.forFeature([EmployeeRepository, EmployeeAssistanceRepository])],
+    imports: [CacheModule.register(), TypeOrmModule.forFeature([EmployeeAssistanceRepository, EmployeeRepository, EmployeeAssistance, Employee])],
     controllers: [FacialRecognitionController],
-    providers: [FacialRecognitionService],
+    providers: [FacialRecognitionService, EmployeeAssistanceRepository],
 })
 export class FacialRecognitionModule {}

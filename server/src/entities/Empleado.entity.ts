@@ -1,9 +1,9 @@
-import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { AsistenciaEmpleado } from './AsistenciaEmpleado.entity';
 
 @Index('documento', ['documento'], { unique: true })
 @Entity('empleado', { schema: 'eaglessafety' })
-export class Empleado {
+export class Empleado extends BaseEntity {
     @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
     id: number;
 

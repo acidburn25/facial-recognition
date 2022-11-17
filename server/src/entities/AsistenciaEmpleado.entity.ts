@@ -1,9 +1,9 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Empleado } from './Empleado.entity';
 
 @Index('documento', ['documento'], {})
 @Entity('asistencia_empleado', { schema: 'eaglessafety' })
-export class AsistenciaEmpleado {
+export class AsistenciaEmpleado extends BaseEntity {
     @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
     id: number;
 
@@ -13,7 +13,7 @@ export class AsistenciaEmpleado {
     @Column('datetime', { name: 'fecha_hora_entrada' })
     fechaHoraEntrada: Date;
 
-    @Column('datetime', { name: 'fecha_hora_salida' })
+    @Column('datetime', { name: 'fecha_hora_salida', nullable: true })
     fechaHoraSalida: Date;
 
     @Column('timestamp', {

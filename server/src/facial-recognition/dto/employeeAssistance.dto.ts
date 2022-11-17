@@ -1,10 +1,7 @@
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsOptional } from 'class-validator';
 import { EmployeeAssistanceInterface } from '../../models/interfaces/employee-assistance.interface'
 
-export class EmployeeDto implements EmployeeAssistanceInterface {
-    @IsNotEmpty()
-    employee: string;
-
+export class EmployeeAssistanceDto implements EmployeeAssistanceInterface {
     @IsOptional()
     id: number;
 

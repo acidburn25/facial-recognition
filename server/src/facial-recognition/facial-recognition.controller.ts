@@ -1,13 +1,12 @@
 import { Controller, HttpStatus, ValidationPipe } from '@nestjs/common';
-import { Body, Post, Put, Res, UseGuards } from '@nestjs/common/decorators';
+import { Body, Patch, Post, Res, UseGuards } from '@nestjs/common/decorators';
 import { Response } from 'express';
 import { Scope } from '@nestjs/common/interfaces';
 import { AuthGuard } from '@nestjs/passport';
-import { AuthInterface } from 'src/auth/auth.interface';
-import { GetAuthData } from 'src/auth/get-user.decorator';
+import { AuthInterface } from '../auth/auth.interface';
+import { GetAuthData } from '../auth/get-user.decorator';
 import { FacialRecognitionService } from './facial-recognition.service';
-import { getConnection } from 'typeorm';
-import { EmployeeDto } from './dto/employee.dto';
+import { EmployeeAssistanceDto } from './dto/employeeAssistance.dto';
 
 @UseGuards(AuthGuard('ApiStrategy'))
 @Controller({ path: '', scope: Scope.REQUEST })
@@ -15,22 +14,16 @@ export class FacialRecognitionController {
     constructor(private facialRecognitionService: FacialRecognitionService) {}
 
     @Post('saveEmployeeEntry')
-    async saveEmployeeEntry(@Body(ValidationPipe) employeeDto: EmployeeDto, @GetAuthData() authData: AuthInterface, @Res() res: Response) {
-        const connection = getConnection();
+    async saveEmployeeEntry(@Body(ValidationPipe) employeeAssistanceDto: EmployeeAssistanceDto, @GetAuthData() authData: AuthInterface, @Res() res: Response) {
+        const attendance = await this.facialRecognitionService.saveEmployeeEntry(employeeAssistanceDto, authData);
 
-        return await connection.manager.transaction(async (entityManager) => {
-            const attendance = await this.facialRecognitionService.saveEmployeeEntry(employeeDto, authData, entityManager);
-            return res.status(HttpStatus.OK).send(attendance);
-        });
+        return res.status(HttpStatus.OK).send(attendance);
     }
 
-    @Put('saveEmployeeOutput')
-    async saveEmployeeOutput(@Body(ValidationPipe) employeeDto: EmployeeDto, @GetAuthData() authData: AuthInterface, @Res() res: Response) {
-        const connection = getConnection();
+    @Patch('saveEmployeeOutput')
+    async saveEmployeeOutput(@Body(ValidationPipe) employeeAssistanceDto: EmployeeAssistanceDto, @GetAuthData() authData: AuthInterface, @Res() res: Response) {
+        const attendance = await this.facialRecognitionService.saveEmployeeOutput(employeeAssistanceDto, authData);
 
-        return await connection.manager.transaction(async (entityManager) => {
-            const attendance = await this.facialRecognitionService.saveEmployeeOutput(employeeDto, authData, entityManager);
-            return res.status(HttpStatus.OK).send(attendance);
-        });
+        return res.status(HttpStatus.OK).send(attendance);
     }
 }

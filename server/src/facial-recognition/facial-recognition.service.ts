@@ -1,34 +1,39 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Scope } from '@nestjs/common';
 import { Logger } from '@nestjs/common/services';
-import { InjectRepository } from '@nestjs/typeorm';
-import { AuthInterface } from 'src/auth/auth.interface';
-import { ESResponseDto } from 'src/dto/esResponse.dto';
-import { EmployeeAssistanceInterface } from 'src/models/interfaces/employee-assistance.interface';
-import { EmployeeRepository } from 'src/repositories/employee.repository';
-import { EmployeeAssistanceRepository } from 'src/repositories/employeeAssistance.repository';
-import { EntityManager } from 'typeorm';
-import { EmployeeDto } from './dto/employee.dto';
+import { AuthInterface } from '../auth/auth.interface';
+import { ESResponseDto } from '../dto/esResponse.dto';
+import { EmployeeRepository, EmployeeAssistanceRepository } from '../repositories/index';
+import { DataSource } from 'typeorm';
+import { EmployeeAssistanceDto } from './dto/employeeAssistance.dto';
+import { ConfigService } from '../config/config.service';
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class FacialRecognitionService {
     private logger = new Logger('FacialRecognitionService', { timestamp: true });
-    assistance: EmployeeAssistanceInterface;
-    entityManager: EntityManager;
+    dataSource: DataSource;
 
     constructor(
-        @InjectRepository(EmployeeRepository)
         private readonly employeeRepository: EmployeeRepository,
-        @InjectRepository(EmployeeAssistanceRepository)
         private readonly employeeAssistanceRepository: EmployeeAssistanceRepository,
     ) {}
 
-    async saveEmployeeEntry(employeeDto: EmployeeDto, authData: AuthInterface, entityManager: EntityManager): Promise<ESResponseDto> {
-        this.assistance = await this.employeeAssistanceRepository.saveEmployeeEntry(employeeDto, entityManager);
+    async saveEmployeeEntry(employeeAssistanceDto: EmployeeAssistanceDto, authData: AuthInterface): Promise<ESResponseDto> {
+        await this.dataSourceManager();
+        const assistance = await this.employeeAssistanceRepository.saveEmployeeEntry(employeeAssistanceDto, this.dataSource);
 
-        return {ok: true, data: this.assistance, message: 'Save employee entry Ok!'}
+        return { ok: true, data: assistance, message: 'Save employee entry Ok!' };
     }
 
-    async saveEmployeeOutput(employeeDto: EmployeeDto, authData: AuthInterface, entityManager: EntityManager): Promise<ESResponseDto> {
-        return {ok: true, data: this.assistance, message: 'Save employee output Ok!'}
+    async saveEmployeeOutput(employeeAssistanceDto: EmployeeAssistanceDto, authData: AuthInterface): Promise<ESResponseDto> {
+        await this.dataSourceManager();
+        const assistance = await this.employeeAssistanceRepository.saveEmployeeOutput(employeeAssistanceDto, this.dataSource);
+
+        return { ok: true, data: assistance, message: 'Save employee output Ok!' };
+    }
+
+    async dataSourceManager() {
+        const configService = new ConfigService();
+        this.dataSource = new DataSource(await configService.getDataSourceOptions());
+        await this.dataSource.initialize();
     }
 }
