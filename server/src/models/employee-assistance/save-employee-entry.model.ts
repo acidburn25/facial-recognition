@@ -7,7 +7,7 @@ export class SaveEmployeeEntryDB {
         const assistance: EmployeeAssistance = new EmployeeAssistance();
 
         assistance.documento = employeeAssistanceDto.documento;
-        assistance.fechaHoraEntrada = employeeAssistanceDto.fechaHoraEntrada;
+        assistance.fechaHoraEntrada = new Date();
         assistance.fechaHoraSalida = null;
 
         return assistance;

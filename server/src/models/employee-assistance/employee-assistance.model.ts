@@ -4,7 +4,7 @@ import { AsistenciaEmpleado as EmployeeAssistance } from 'src/entities/Asistenci
 export class EmployeeAssistanceObject implements EmployeeAssistanceInterface {
     id: number;
     documento: string;
-    fechaHoraEntrada: Date;
+    fechaHoraEntrada: Date | string;
     fechaHoraSalida: Date;
     createdAt: Date;
     updatedAt: Date;

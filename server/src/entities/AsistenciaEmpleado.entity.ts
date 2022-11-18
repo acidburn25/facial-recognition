@@ -11,7 +11,7 @@ export class AsistenciaEmpleado extends BaseEntity {
     documento: string;
 
     @Column('datetime', { name: 'fecha_hora_entrada' })
-    fechaHoraEntrada: Date;
+    fechaHoraEntrada: Date | string;
 
     @Column('datetime', { name: 'fecha_hora_salida', nullable: true })
     fechaHoraSalida: Date;
