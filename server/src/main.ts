@@ -14,8 +14,7 @@ async function bootstrap() {
         }),
     );
 
-    app.enableCors({ origin: [/.rindegastos.com$/, /localhost:[0-9]{4}$/, /^io.ionic.starter:/, 'io.ionic.starter://home/signin', /localhost/] });
-
+    app.enableCors();
     await app.listen(await config.getPortConfig());
 }
 bootstrap();
