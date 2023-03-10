@@ -1,6 +1,5 @@
 export interface AuthInterface {
-    userData: any;
-    //companyId: string;
+    user: string;
     token: string;
     ip: string;
     url: string;

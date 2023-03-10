@@ -6,7 +6,7 @@ import { SaveEmployeeEntryDB } from '../models/employee-assistance/save-employee
 import { EmployeeAssistanceObject } from '../models/employee-assistance/employee-assistance.model';
 import { BadRequestException, ConflictException, Injectable, Logger } from '@nestjs/common';
 
-@Injectable()
+//@Injectable()
 @EntityRepository(EmployeeAssistance)
 export class EmployeeAssistanceRepository extends Repository<EmployeeAssistance> {
     private logger = new Logger('EmployeeAssistanceRepository', { timestamp: true });

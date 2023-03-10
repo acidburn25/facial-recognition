@@ -35,29 +35,20 @@ export class ConfigService {
         return this.get('PORT');
     }
 
+    public async getEnvironment(): Promise<string> {
+        if (this.readAWSConfig) {
+            await this.upAWSConfig();
+        }
+
+        return this.get('ENVIRONMENT');
+    }
+
     public async getDevAPI() {
         if (this.readAWSConfig) {
             await this.upAWSConfig();
         }
 
         return this.get('DEV_API');
-    }
-
-    public async getServerKeyApi() {
-        if (this.readAWSConfig) {
-            await this.upAWSConfig();
-        }
-        return {
-            secret: this.get('API_KEY'),
-            signOptions: { expiresIn: '1h' },
-        };
-    }
-
-    public async getServerKeyApiWebApp() {
-        if (this.readAWSConfig) {
-            await this.upAWSConfig();
-        }
-        return this.get('API_KEY');
     }
 
     public async getMongoConfig() {
@@ -102,7 +93,6 @@ export class ConfigService {
 
         return dataSourceOptions;
     }
-
 
     public async upAWSConfig() {
         let error: any;
@@ -175,5 +165,18 @@ export class ConfigService {
         }
 
         return this.get('MICROSERVICE_BASE_URL');
+    }
+
+    public async getS3BucketConfig() {
+        if (this.readAWSConfig) {
+            await this.upAWSConfig();
+        }
+
+        return {
+            bucketName: this.get('AWS_S3_BUCKET_NAME'),
+            accessKey: this.get('AWS_ACCESS_KEY_ID'),
+            secretAccessKey: this.get('AWS_SECRET_ACCESS_KEY'),
+            s3BucketUrl: this.get('S3_BUCKET'),
+        };
     }
 }

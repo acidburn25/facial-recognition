@@ -2,11 +2,11 @@ import { Injectable, Scope } from '@nestjs/common';
 import { Logger } from '@nestjs/common/services';
 import { AuthInterface } from '../auth/auth.interface';
 import { ESResponseDto } from '../dto/esResponse.dto';
-import { EmployeeRepository, EmployeeAssistanceRepository } from '../repositories/index';
+import { EmployeeRepository, EmployeeAssistanceRepository, UsersEmployeeRepository } from '../repositories/index';
 import { DataSource } from 'typeorm';
 import { EmployeeAssistanceDto } from './dto/employeeAssistance.dto';
 import { ConfigService } from '../config/config.service';
-import { EmployeeDto } from './dto/employee.dto';
+import { UsersEmployeeDto } from './dto/usersEmployee.dto';
 
 @Injectable({ scope: Scope.REQUEST })
 export class FacialRecognitionService {
@@ -16,13 +16,21 @@ export class FacialRecognitionService {
     constructor(
         private readonly employeeRepository: EmployeeRepository,
         private readonly employeeAssistanceRepository: EmployeeAssistanceRepository,
+        private readonly usersEmployeeRepository: UsersEmployeeRepository,
     ) {}
 
-    async getEmployeeByDocument(employeeDto: EmployeeDto | any, authData: AuthInterface): Promise<ESResponseDto> {
+    async getUserEmployee(usersEmployeeDto: UsersEmployeeDto | any, authData: AuthInterface): Promise<ESResponseDto> {
         await this.dataSourceManager();
-        const assistance = await this.employeeRepository.getEmployeeByDocument(employeeDto, this.dataSource);
+        const assistance = await this.employeeRepository.getEmployeeByDocument(usersEmployeeDto, this.dataSource);
 
         return { ok: true, data: assistance, message: 'Get employee Ok!' };
+    }
+
+    async createUserEmployee(usersEmployeeDto: UsersEmployeeDto, authData: AuthInterface): Promise<ESResponseDto> {
+        await this.dataSourceManager();
+        const user = await this.usersEmployeeRepository.createUserEmployee(usersEmployeeDto, this.dataSource);
+
+        return { ok: true, data: user, message: 'Create user employee Ok!' };
     }
 
     async saveEmployeeEntry(employeeAssistanceDto: EmployeeAssistanceDto, authData: AuthInterface): Promise<ESResponseDto> {

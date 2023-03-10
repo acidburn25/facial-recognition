@@ -1,5 +1,6 @@
 import { BaseEntity, Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { AsistenciaEmpleado } from './AsistenciaEmpleado.entity';
+import { Usuarios } from "./Usuarios.entity";
 
 @Index('documento', ['documento'], { unique: true })
 @Entity('empleado', { schema: 'eaglessafety' })
@@ -53,4 +54,7 @@ export class Empleado extends BaseEntity {
 
     @OneToMany(() => AsistenciaEmpleado, (asistenciaEmpleado) => asistenciaEmpleado.documento2)
     asistenciaEmpleados: AsistenciaEmpleado[];
+
+    @OneToMany(() => Usuarios, (usuarios) => usuarios.documento2)
+    usuarios: Usuarios[];
 }

@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
@@ -6,38 +6,40 @@ import { ConfigService } from '../config/config.service';
 import { JwtPayload } from './jwt-payload.interface';
 
 @Injectable()
-export class JwtApiStrategy extends PassportStrategy(Strategy, 'ApiStrategy') {
+export class JwtStrategy extends PassportStrategy(Strategy) {
     private _secretOrKeyProvider: (_request: any, _rawJwtToken: any, done: (arg0: null, arg1: string) => void) => void;
-    token: any;
+    private logger = new Logger('JwtStrategy', { timestamp: true });
     constructor(private readonly configService: ConfigService, private jwtService: JwtService) {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             secretOrKey: 'rindegastos',
         });
-
-        configService.getServerKeyApiWebApp().then((token) => {
+        configService.getServerKey().then((token) => {
             this._secretOrKeyProvider = (_request: any, _rawJwtToken: any, done: (arg0: null, arg1: string) => void) => {
                 done(null, token);
-                this.token = _rawJwtToken;
             };
         });
     }
 
-    /**
-     * @description Método que valida el payload y el token de autorización
-     * @param {JwtPayload} payload
-     * @returns {Promise<any>}
-     * @memberof JwtFalabellaStrategy
-     */
     async validate(payload: JwtPayload): Promise<any> {
-        const { user_id, company_id } = payload;
-        if (user_id === undefined && company_id === undefined) {
-            throw new UnauthorizedException('Invalid Username');
+        const { username, userId, ms, oldToken, message } = payload;
+
+        if (!userId || !username) {
+            this.logger.error(`Invalid JWT payload: ${JSON.stringify(payload)}`);
+            throw new UnauthorizedException('No estas autorizado');
         }
-        // if (userId !== this.configService.get('USERNAME_FALABELLA')) {
-        //     throw new UnauthorizedException('Invalid Credentials');
-        // }
-        const user = { user_id, company_id };
-        return user;
+
+        const dataToSign = {
+            username,
+            userId,
+            ms,
+            message,
+            oldToken,
+        };
+
+        let token = this.jwtService.sign(dataToSign);
+        token = `Bearer ${token}`;
+
+        return token;
     }
 }

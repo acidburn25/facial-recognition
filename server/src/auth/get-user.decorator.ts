@@ -1,18 +1,15 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { AuthInterface } from './auth.interface';
+import { AuthInterface } from '../auth/auth.interface';
 
-export const GetAuthData = createParamDecorator(
-    (_data, ctx: ExecutionContext): AuthInterface => {
-        const req = ctx.switchToHttp().getRequest();
+export const GetAuthData = createParamDecorator((_data, ctx: ExecutionContext): AuthInterface => {
+    const req = ctx.switchToHttp().getRequest();
 
-        const authData = {
-            userData: req.user,
-            //companyId: req.company_id,
-            token: req.headers.authorization,
-            ip: req.ip,
-            url: req.url,
-        };
+    const authData = {
+        user: req.user,
+        token: req.headers.authorization,
+        ip: req.ip,
+        url: req.url,
+    };
 
-        return authData;
-    },
-);
+    return authData;
+});
