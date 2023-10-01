@@ -14,8 +14,8 @@ import { UsersEmployeeDto } from './dto/usersEmployee.dto';
 export class FacialRecognitionController {
     constructor(private facialRecognitionService: FacialRecognitionService) {}
 
-    @Get('getUserEmployee')
-    async getUserEmployee(@Body() userEmployeeDto: UsersEmployeeDto, @GetAuthData() authData: AuthInterface, @Res() res: Response) {
+    @Post('getUserEmployee')
+    async getUserEmployee(@Body() userEmployeeDto: any, @GetAuthData() authData: AuthInterface, @Res() res: Response) {
         const employee = await this.facialRecognitionService.getUserEmployee(userEmployeeDto, authData);
 
         return res.status(HttpStatus.OK).send(employee);
@@ -30,6 +30,7 @@ export class FacialRecognitionController {
 
     @Post('saveEmployeeEntry')
     async saveEmployeeEntry(@Body() employeeAssistanceDto: EmployeeAssistanceDto, @GetAuthData() authData: AuthInterface, @Res() res: Response) {
+        console.log('aaaaa');
         const attendance = await this.facialRecognitionService.saveEmployeeEntry(employeeAssistanceDto, authData);
 
         return res.status(HttpStatus.OK).send(attendance);

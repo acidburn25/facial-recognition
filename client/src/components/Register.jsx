@@ -20,7 +20,6 @@ const Register = () => {
   const createUserEmployee = async () => {
     const user = {
       document: values.document,
-      user: values.user,
       pwd: values.pwd,
     };
 
@@ -101,7 +100,7 @@ const Register = () => {
             <div >{data ? <div><strong>El usuario con documento {values.document} registrado exitosamente</strong>
             <br></br><br></br>
             <button onClick={handleClick} type="button" className="relative w-full h-full inline-block px-6 py-2.5 bg-greenEagles text-white font-bold text-xs leading-tight uppercase rounded-full shadow-md hover:bg-greenEaglesHover hover:shadow-lg focus:bg-greenEaglesFocus focus:shadow-lg focus:outline-none focus:ring-0 active:bg-greenEaglesActive active:shadow-lg transition duration-150 ease-in-out">Ir a Iniciar sesión</button>
-            </div> : null}</div>
+            </div> : null }</div>
           </div>
         </div>
       </div>

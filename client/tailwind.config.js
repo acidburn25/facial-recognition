@@ -48,6 +48,7 @@ module.exports = {
       backgroundColor: {
         mainColor: '#FBF8F9',
         secondaryColor: '#F0F0F0',
+        backgroundPage: '#F0F2F5',
         blackOverlay: 'rgba(0, 0 ,0 ,0.7)',
         greenEagles: 'rgba(95, 174, 39, 255)',
         greenEaglesHover: 'rgba(78, 137, 35, 255)',

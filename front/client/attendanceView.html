@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Formulario de Contacto</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="main.css" type="text/css" />
+	</head>
+	<body>
+		<section class="form-contact">
+			<header>
+				<span>
+					<img src="logo.png" alt="50px" />
+				</span>
+			</header>
+			<form id="attendance-form" class="contact">
+				<label for="document">DNI</label><br />
+				<input type="text" id="document" name="document" required /><br />
+				<label for="entry">Tipo registro</label><br />
+				<input type="radio" id="entry" name="attendance" value="1" required checked />Ingreso<br />
+				<input type="radio" id="out" name="attendance" value="" required />Salida<br />
+				<button type="submit">Registrar</button>
+			</form>
+		</section>
+		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+		<script>
+			const entryValue = document.getElementById('entry');
+			const outValue = document.getElementById('out');
+
+			entryValue.addEventListener('click', function () {
+				if (entryValue.checked) {
+					entryValue.value = '1';
+					outValue.value = '';
+				}
+			});
+
+			outValue.addEventListener('click', function () {
+				if (outValue.checked) {
+					outValue.value = '1';
+					entryValue.value = '';
+				}
+			});
+
+			document.getElementById('attendance-form').addEventListener('submit', function (e) {
+				e.preventDefault();
+
+				const documentValue = document.getElementById('document').value;
+				const data = {
+					documento: documentValue,
+				};
+
+				if (entryValue.value == 1) {
+					console.log('hola');
+					axios
+						.post('http://localhost:3005/saveEmployeeEntry', data)
+						.then(function (response) {
+							console.log('Mensaje enviado con éxito:', response.data);
+							// Puedes realizar acciones adicionales aquí, como mostrar un mensaje de confirmación al usuario.
+						})
+						.catch(function (error) {
+							console.error('Error al enviar el mensaje:', error);
+							// Manejar errores aquí, por ejemplo, mostrar un mensaje de error al usuario.
+					});
+				} else {
+					axios
+						.patch('http://localhost:3005/saveEmployeeOutput', data)
+						.then(function (response) {
+							console.log('Mensaje enviado con éxito:', response.data);
+							// Puedes realizar acciones adicionales aquí, como mostrar un mensaje de confirmación al usuario.
+						})
+						.catch(function (error) {
+							console.error('Error al enviar el mensaje:', error);
+							// Manejar errores aquí, por ejemplo, mostrar un mensaje de error al usuario.
+					});
+				}
+			});
+		</script>
+	</body>
+</html>

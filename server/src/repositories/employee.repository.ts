@@ -12,7 +12,7 @@ export class EmployeeRepository extends Repository<Users> {
         let employees: any;
 
         try {
-            employees = await dataSource.manager.findOneBy(Users, { documento: usersEmployeeDto.documento, contrasena: usersEmployeeDto.pwd });
+            employees = await dataSource.manager.findOne(Users, { where: { documento: usersEmployeeDto.documento, contrasena: usersEmployeeDto.pwd }});
         } catch (error) {
             this.logger.error(`Error en la query para getEmployee`, error.stack);
             throw new BadRequestException(`Error en la query para saveEmployeeEntry`, error);
